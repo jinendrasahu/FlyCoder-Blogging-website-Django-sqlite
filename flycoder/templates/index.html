@@ -1,0 +1,26 @@
+{% extends 'basic.html' %}
+{% block title %}Blog{% endblock %}
+{% block homeactive %}active{% endblock %}
+{% block body %}  
+
+<div class="container my-3">
+  <aside class="col-md-12 blog-sidebar">
+    <div class="p-4 mb-3 rounded" style="background-color: lightblue;">
+      <h4 class="font-italic">Welcome To FlyCoder</h4>
+      <p class="mb-0">Flycoder is a blogging website where you can write post and read blogs.</p>
+    </div>
+  </aside><!-- /.blog-sidebar -->
+       {% for item in allposts %}
+    
+    <div class="row no-gutters outline border rounded overflow-hidden flex-md-row my-4 shadow-sm h-md-150 position-relative">
+        <div class="col px-4 py-2 d-flex flex-column position-static">
+          <div class="d-inline-block mb-2 text-primary"><strong>Article By {{item.author}}</strong> ({{item.view}} Views)</div> 
+          <h3 class="mb-0">{{item.title|truncatechars:100}}...</h3>
+          <p class="card-text mb-auto"><div class="preview">{{item.content|safe|truncatechars:300}}...</div></p>
+          <div class=""> <a href="/{{item.slug}}/" class="btn btn-primary">Continue reading</a></div>
+        </div>
+      </div>
+       {% endfor %}
+  
+</div>
+{% endblock %}

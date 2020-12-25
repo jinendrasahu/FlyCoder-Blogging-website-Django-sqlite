@@ -1,0 +1,42 @@
+{% extends 'basic.html' %}
+{% block title %}Blog{% endblock %}
+{% block contactactive %}active{% endblock%}
+{% block body %}
+<!-- {% if thanks %} -->
+
+<!-- {% endif %}   -->
+<div class="container">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <form method="POST" action="/contact/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name : </label>
+                <input id="name" name="name" placeholder="Enter Your Name" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="email">Email :</label>
+                <input id="email" name="email" placeholder="Enter Your Email" type="email" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone :</label>
+                <input id="phone" name="phone" placeholder="Enter Your Phone Number" type="number" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="content">Content :</label>
+                <textarea rows="3" name="content" id="content"  class="form-control"></textarea>
+               
+            </div>
+            <div class="form-group">
+                <button id="submit" class="my-4 btn-primary btn"  type="submit">Submit</button>
+            </div>
+          
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js%}
+<script>
+   
+</script>
+{% endblock%}

@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %} {% endblock %}
+
+    </title>
+    <style>
+        .card-img-top{
+            height: 200px;
+        }
+        .col-md-3{
+            display: inline-block;
+            padding-top: 40px;
+            margin-left:-4px;
+            padding-left: 40px;
+        }
+        .nopad{
+            padding-left: 0;
+            padding-right: 0;
+        }
+       .carousel-control-next-icon,
+       .carousel-control-prev-icon{
+background-color: blue;
+       }
+       .btn-group {
+  font-size: 12px; /*or whatever size */
+}
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- sign up -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Sign Up</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/signup/">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="username">User Name : </label>
+              <input id="username" name="username" placeholder="Enter Your Username" type="text" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="fname">First Name : </label>
+            <input id="fname" name="fname" placeholder="Enter Your First Name" type="text" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="lname">Last Name : </label>
+          <input id="lname" name="lname" placeholder="Enter Your Last Name" type="text" class="form-control" required>
+      </div>
+          <div class="form-group">
+              <label for="email">Email :</label>
+              <input id="email" name="email" placeholder="Enter Your Email" type="email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="pass1">Password : </label>
+            <input id="pass1" name="pass1" placeholder="Enter Your Password" type="password" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="pass2">Confirm Password : </label>
+          <input id="pass2" name="pass2" placeholder="Reenter Your Password" type="password" class="form-control" required>
+      </div>
+          <div class="form-group">
+              <button id="submit" class="my-4 btn-primary btn"  type="submit">Submit</button>
+          </div>
+        
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- login -->
+<div class="modal fade" id="LoginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/login/">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="username">User Name : </label>
+              <input id="username" name="username" placeholder="Enter Your Username" type="text" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="pass1">Password : </label>
+            <input id="pass1" name="pass1" placeholder="Enter Your Password" type="password" class="form-control" required>
+        </div>
+          <div class="form-group">
+              <button id="submit" class="my-4 btn-primary btn"  type="submit">Submit</button>
+          </div>
+        
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">FlyCoder</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link {% block homeactive %}{% endblock%}" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% block aboutactive %}{% endblock %}" href="/about">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% block contactactive %}{% endblock %}" href="/contact">Contact Us</a>
+              </li>
+            </ul>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+           <li> <form action="/search/" method="GET" class="d-flex">
+              <input name="search" id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="me-2 btn btn-outline-info" type="submit">Search</button>
+            </form>
+          </li>
+          {% if user.is_authenticated %}
+          <li>
+            <p class="h5 border rounded p-2 text-light mx-2">Welcome {{request.user}}</p>
+            
+            <!-- <div class="btn-group">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Welcom to {{request.user}}
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/logout/">Logout</a>
+              </div>
+            </div> -->
+          </li>
+          <li><button class="btn btn-secondary"><a  href="/logout/" class="text-white">Logout</a></button></li>
+          {% else %}
+          <li>
+            <button type="button" id="signup" class="mx-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+              Sign Up
+            </button></li>
+            <li>
+              <button type="button" id="login" class="btn btn-primary" data-toggle="modal" data-target="#LoginModal">
+                Log In
+              </button>
+            </li>
+            {% endif %}
+        </ul>
+         
+          </div>
+        </div>
+      </nav>
+      {% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show rounded mx-2 my-2" role="alert">
+    <strong>Message : </strong>{{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+      {% block body %} {% endblock %}
+    >
+      
+     
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <script>
+        var previews=document.getElementsByClassName("preview");
+        Array.from(previews).forEach((elem)=>{
+          elem.innerHTML=elem.innerText;
+        });
+       $('#signup').on('shown.bs.modal', function () {
+  $('#exampleModal').trigger('focus')
+});
+$('#login').on('shown.bs.modal', function () {
+  $('#LoginModal').trigger('focus')
+});
+
+$(document).ready(function(){
+$(".btn-primary").css({"background-color":"lightblue","color":"black"});
+});
+    </script>  
+      {% block js %} {% endblock %}
+    </body>
+    </html>

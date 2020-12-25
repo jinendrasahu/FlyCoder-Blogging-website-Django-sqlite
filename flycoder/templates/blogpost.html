@@ -1,0 +1,113 @@
+{% extends 'basic.html' %}
+{% block title %}Blog{% endblock %}
+{% block body %} 
+{% load humanize %} 
+{% load extras %} 
+<div class="container my-4">
+<main role="main" class="container">
+    <div class="row">
+      <div class="col-md-8 blog-main">
+        <h3 class="pb-4 mb-4 font-italic border-bottom">
+         {{post.title}}
+        </h3>
+  
+        <div class="blog-post">
+          <h2 class="blog-post-title"></h2>
+          <p class="blog-post-meta">Article by <a href="#">{{post.author}}</a></p> ({{post.view}} Views)
+          <p class="blog-post-meta"> {{post.pub_date}}</p>
+  
+          
+        </div><!-- /.blog-post -->
+  
+      
+      <p><div class="preview">{{post.content|safe}}</div></p>
+  
+      </div><!-- /.blog-main -->
+  
+      <aside class="col-md-4 blog-sidebar">
+        <div class="p-4 mb-3 bg-light rounded">
+          <h4 class="font-italic">About</h4>
+          <p class="mb-0">This is a blogging website where you can write post and read blogs.</p>
+        </div>
+  
+       
+  
+        <div class="p-4">
+          <h4 class="font-italic">Elsewhere</h4>
+          <ol class="list-unstyled">
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Facebook</a></li>
+          </ol>
+        </div>
+      </aside><!-- /.blog-sidebar -->
+  
+    </div><!-- /.row -->
+  <div class="container">
+    <hr>
+    <h4>Comments ({{comment.count}})</h4>
+    {% if user.is_authenticated %}
+    <form method="POST" action="/postcomment/">
+      {% csrf_token %}
+      <div class="form-group col-md-6">
+          <input type="text"  name="comment" id="comment" placeholder="Post your comment..."  class="form-control">
+          <input type="hidden" value="{{post.sno}}" name="postsno" id="postsno"  class="form-control">
+          <input type="hidden" value="" name="parentsno" id="parentsno"  class="form-control">
+
+      </div>
+      <div class="form-group">
+          <button id="submit" class="my-4 btn-primary btn"   type="submit">Post</button>
+      </div>
+    
+  </form>
+  {% else %}
+  Please Log in to comment
+  {% endif %}
+    <div class="container">
+     
+      <div class="row py-2">
+      {% for item in comment%}
+      <div class="row my-3">
+        <div class="col-md-1">
+          <img class="border-primary border rounded mx-auto d-block" width="60" height="60" src="/static/img/user.png" alt="user">
+        </div>
+        <div class="col-md-11">
+          <b>{{item.user.first_name}}</b> <span style="font-size: 10px;" class="bg-secondary text-white rounded p-1"> {{item.timestamp | naturaltime}}</span>
+          <div>{{item.comment}}</div>
+          <button class="rounded bg-secondary text-white mt-1" type="button" data-toggle="collapse" data-target="#replybox{{item.sno}}" aria-expanded="false" aria-controls="replybox{{item.sno}}">Reply</button>
+          <div class="collapse mt-2" id="replybox{{item.sno}}">
+            <form method="POST" action="/postcomment/">
+              {% csrf_token %}
+              <div class="form-group col-md-6">
+                  <input type="text"  name="comment" id="comment" placeholder="Post your comment..."  class="form-control">
+                  <input type="hidden" value="{{item.sno}}" name="parentsno" id="parentsno"  class="form-control">
+                  <input type="hidden" value="{{item.post.sno}}" name="postsno" id="postsno"  class="form-control">
+
+              </div>
+              <div class="form-group">
+                  <button id="submit" class="my-4 btn-primary btn"   type="submit">Post</button>
+              </div>
+            
+          </form>
+          </div>
+          {% for reply in replyDict|get_val:item.sno %}
+          <div class="row my-3">
+            <div class="col-md-1">
+              <img class="border-danger border rounded mx-auto d-block" width="40" height="40" src="/static/img/user.png" alt="user">
+            </div>
+            <div class="col-md-11">
+              <b>{{reply.user.first_name}}</b> <span style="font-size: 10px;" class="bg-secondary text-white rounded p-1"> {{reply.timestamp | naturaltime}}</span>
+              <div>{{reply.comment}}</div>
+              </div>
+              </div>
+              
+        {% endfor %}
+        </div>
+        </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+  </main>
+  {% endblock %}

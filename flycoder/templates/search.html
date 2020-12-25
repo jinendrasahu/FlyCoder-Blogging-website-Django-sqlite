@@ -1,0 +1,25 @@
+{% extends 'basic.html' %}
+{% block title %}Search{% endblock %}
+{% block body %}  
+
+<div class="container my-4">
+    <h4>Search Results : </h4>
+       {% if allposts|length < 1 %}
+       <p>Search result not found</p>
+       <p>No result found on {{query}} .there is no such rsult</p>
+       <ul>
+           <li>Please refind your search</li>
+       </ul>
+       {% endif %}
+       {% for item in allposts %}
+    <div class="row no-gutters outline border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">{{item.author}}</strong>
+          <h3 class="mb-0">{{item.title|truncatechars:100}}...</h3>
+          <p class="card-text mb-auto">{{item.content|truncatechars:300}}...</p>
+          <a href="/{{item.slug}}/" >Continue reading</a>
+        </div>
+      </div>
+       {% endfor %}
+</div>
+{% endblock %}
